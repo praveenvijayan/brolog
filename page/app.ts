@@ -7,6 +7,7 @@ import {
   type NetSample,
 } from "./schema";
 import type { GpuSample } from "../src/host/gpu";
+import type { StorageSample } from "../src/host/storage";
 import type { SystemInfo } from "../src/host/vitals";
 import { Sparkline } from "./charts";
 const el = (id: string) => document.getElementById(id)!;
@@ -86,6 +87,40 @@ try {
   }
   void updateGpu();
   setInterval(() => void updateGpu(), 1000);
+  let storagePending = false;
+  async function updateStorage() {
+    if (storagePending || bridge.state !== "open") return;
+    storagePending = true;
+    try {
+      const sample = await bridge.call<StorageSample | null>("system.storage");
+      if (!sample) {
+        show("storage", "n/a");
+        show("storage-detail", "No filesystem statistics on this platform");
+        (el("storage-gauge") as HTMLMeterElement).value = 0;
+        return;
+      }
+      const percent = (sample.usedBytes / sample.totalBytes) * 100;
+      show("storage", percent.toFixed(1) + "%");
+      show(
+        "storage-detail",
+        formatBytes(sample.usedBytes) +
+          " used / " +
+          formatBytes(sample.totalBytes) +
+          " · " +
+          formatBytes(sample.availableBytes) +
+          " available",
+      );
+      show("storage-path", "System volume · " + sample.path);
+      (el("storage-gauge") as HTMLMeterElement).value = percent;
+    } catch {
+      show("storage", "n/a");
+      show("storage-detail", "The host did not answer the storage probe");
+    } finally {
+      storagePending = false;
+    }
+  }
+  void updateStorage();
+  setInterval(() => void updateStorage(), 5000);
   const info = await bridge.call<SystemInfo>("system.info");
   show("hostname", info.hostname);
   show("machine", info.platform + " / " + info.arch);

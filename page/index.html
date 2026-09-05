@@ -104,7 +104,26 @@
       </div>
       <section>
         <div class="section-head">
-          <h2>05 <span>Network interfaces</span></h2>
+          <h2>05 <span>Storage</span></h2>
+          <span class="caption" id="storage-path">System volume</span>
+        </div>
+        <div class="reading">
+          <strong id="storage">—</strong><span id="storage-detail">Waiting for the filesystem</span>
+        </div>
+        <meter
+          id="storage-gauge"
+          min="0"
+          max="100"
+          value="0"
+          aria-label="Storage utilisation"
+        ></meter>
+        <p class="caption" id="storage-note">
+          Used and available space on the volume that holds the operating system, refreshed every 5 s.
+        </p>
+      </section>
+      <section>
+        <div class="section-head">
+          <h2>06 <span>Network interfaces</span></h2>
           <span class="caption">Addresses masked · every 5 samples</span>
         </div>
         <div class="table-wrap">

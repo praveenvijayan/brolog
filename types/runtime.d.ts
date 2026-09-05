@@ -3,6 +3,7 @@
 declare const process: {
   platform: string;
   argv: string[];
+  env: Record<string, string | undefined>;
   on(event: string, listener: () => void): void;
   exit(code: number): never;
 };
@@ -33,6 +34,9 @@ declare module "node:fs/promises" {
     options: { recursive: boolean },
   ): Promise<string | undefined>;
   export function stat(path: string): Promise<{ size: number }>;
+  export function statfs(
+    path: string,
+  ): Promise<{ bsize: number; blocks: number; bfree: number; bavail: number }>;
 }
 declare module "node:os" {
   export function cpus(): {

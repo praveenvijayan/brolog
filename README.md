@@ -77,6 +77,10 @@ Local builds do not publish anything. The release workflow runs checks and attac
 
 Bun 1.4.0 on macOS ARM64: all 10 tests and TypeScript checks pass. All five binaries compile. The compiled ARM64 binary served live samples, passed an unauthenticated curl 403 check, and resumed the same session after killing the socket. Browser inspection covered 900 px and 400 px (no document overflow). CPU stayed at 14.0% while received bytes increased during pause, including an interval change. After closing the controlled browser tab, the listener stopped in 29.1 seconds from the measurement start (roughly 30 seconds from tab close), and the process exited with status 0. Cross-compiled Linux, Windows and Intel macOS binaries have not been run on their native operating systems.
 
+## Storage reading
+
+Panel 05 shows used and available space on the volume that holds the operating system: `/` on macOS and Linux, the system drive on Windows. It reads `fs.statfs` once every 5 s through a cached, coalesced unary call. On macOS the root reports the whole APFS container, matching Finder and `df`. Used is derived from free blocks so used plus free equals total; available excludes blocks reserved for root. Other volumes are not listed and no file names are read. A missing or unreadable filesystem shows n/a.
+
 ## GPU reading
 
 GPU usage has its own panel (02) with Active/Idle status and a 60-second sparkline. On macOS, a bounded, cached `ioreg` probe reads the driver's Device Utilization counter once per second, independently of CPU pause and sample interval. Multiple devices report the busiest percentage. This adds no dependency or admin requirement; no process data is collected. Missing counters and other operating systems show Unavailable, never a fabricated zero. GPU RPC traffic is excluded from the sample-payload byte comparison.

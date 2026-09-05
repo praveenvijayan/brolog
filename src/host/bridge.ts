@@ -1,4 +1,5 @@
 import { createGpuReader } from "./gpu";
+import { createStorageReader } from "./storage";
 import { createBridge } from "brobridge";
 import * as os from "node:os";
 import {
@@ -15,7 +16,11 @@ export async function startHost(page: string) {
     index: { body: page, contentType: "text/html" },
   });
   const totals = { payloadBytes: 0, jsonBytes: 0 };
-  bridge.expose("system", { info: systemInfo, gpu: createGpuReader() });
+  bridge.expose("system", {
+    info: systemInfo,
+    gpu: createGpuReader(),
+    storage: createStorageReader(),
+  });
   bridge.expose("demo", {
     echo: (value: unknown) => value,
     stats: () => ({ ...totals }),
