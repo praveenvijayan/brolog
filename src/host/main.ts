@@ -1,7 +1,12 @@
 import page from "../../dist/index.html" with { type: "text" };
+import { version } from "../../package.json" with { type: "json" };
 import { startHost } from "./bridge";
 import { openBrowser } from "./open-browser";
 async function main() {
+  if (process.argv.slice(2).some((arg) => arg === "--version" || arg === "-v")) {
+    console.log(`brolog v${version}`);
+    return;
+  }
   const bridge = await startHost(page);
   let shuttingDown = false;
   async function quit(code: number) {
@@ -13,7 +18,7 @@ async function main() {
   process.on("SIGINT", () => void quit(0));
   process.on("SIGTERM", () => void quit(0));
   console.log(
-    `brolog — opening your browser…\nIf it did not open, paste this into the address bar: ${bridge.url}\nClose the tab to quit, or press Ctrl+C.`,
+    `brolog v${version} — opening your browser…\nIf it did not open, paste this into the address bar: ${bridge.url}\nClose the tab to quit, or press Ctrl+C.`,
   );
   void openBrowser(bridge.url);
   const started = Date.now();

@@ -71,4 +71,4 @@ Bun 1.4.0 on macOS ARM64: all 10 tests and TypeScript checks pass. All five bina
 
 ## GPU reading
 
-GPU usage and Active/Idle status appear beside CPU. On macOS, a bounded, cached `ioreg` probe reads the driver's Device Utilization counter once per second, independently of CPU pause and sample interval. Multiple devices report the busiest percentage. This adds no dependency or admin requirement; no process data is collected. Missing counters and other operating systems show Unavailable, never a fabricated zero. GPU RPC traffic is excluded from the sample-payload byte comparison.
+GPU usage has its own panel (02) with Active/Idle status and a 60-second sparkline. On macOS, a bounded, cached `ioreg` probe reads the driver's Device Utilization counter once per second, independently of CPU pause and sample interval. Multiple devices report the busiest percentage. This adds no dependency or admin requirement; no process data is collected. Missing counters and other operating systems show Unavailable, never a fabricated zero. GPU RPC traffic is excluded from the sample-payload byte comparison.

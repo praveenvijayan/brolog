@@ -39,9 +39,7 @@
           </button>
         </div>
         <div class="reading">
-          <strong id="cpu">—</strong
-          ><span class="gpu-reading">GPU <b id="gpu">—</b> <span id="gpu-status">Checking</span></span>
-          <span id="cpu-model">Waiting for samples</span>
+          <strong id="cpu">—</strong><span id="cpu-model">Waiting for samples</span>
         </div>
         <canvas
           id="cpu-chart"
@@ -58,7 +56,22 @@
       </section>
       <div class="secondary">
         <section>
-          <h2>02 <span>Memory</span></h2>
+          <h2>02 <span>GPU utilisation</span></h2>
+          <div class="reading">
+            <strong id="gpu">—</strong><span id="gpu-status">Checking</span>
+          </div>
+          <p id="gpu-detail">Waiting for the driver</p>
+          <canvas
+            id="gpu-chart"
+            role="img"
+            aria-label="GPU utilisation over the last 60 seconds, from 0 to 100 percent"
+          ></canvas>
+          <div class="axis">
+            <span>60 seconds ago</span><span>0–100% · now</span>
+          </div>
+        </section>
+        <section>
+          <h2>03 <span>Memory</span></h2>
           <div class="reading"><strong id="memory">—</strong></div>
           <p id="memory-detail">Waiting for samples</p>
           <meter
@@ -78,7 +91,7 @@
           </div>
         </section>
         <section>
-          <h2>03 <span>System load</span></h2>
+          <h2>04 <span>System load</span></h2>
           <div class="loads">
             <div><strong id="load1">—</strong><span>1 minute</span></div>
             <div><strong id="load5">—</strong><span>5 minutes</span></div>
@@ -91,7 +104,7 @@
       </div>
       <section>
         <div class="section-head">
-          <h2>04 <span>Network interfaces</span></h2>
+          <h2>05 <span>Network interfaces</span></h2>
           <span class="caption">Addresses masked · every 5 samples</span>
         </div>
         <div class="table-wrap">

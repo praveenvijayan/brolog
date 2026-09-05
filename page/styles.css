@@ -174,7 +174,7 @@ canvas {
 }
 .secondary {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 36px;
 }
 .secondary canvas {
@@ -298,7 +298,8 @@ footer {
   padding: 16px;
   margin-bottom: 16px;
 }
-#memory-detail {
+#memory-detail,
+#gpu-detail {
   color: var(--muted);
   font-size: 12px;
 }
@@ -346,9 +347,8 @@ footer {
     gap: 36px;
   }
 }
-
-.reading { flex-wrap: wrap; }
-.reading .gpu-reading { font-size: 14px; white-space: nowrap; }
-.gpu-reading b { font-size: 24px; margin: 0 6px; }
-#gpu-status { font-size: 11px; }
-#cpu-model { flex-basis: 100%; }
+@media (max-width: 900px) and (min-width: 601px) {
+  .secondary {
+    grid-template-columns: 1fr 1fr;
+  }
+}

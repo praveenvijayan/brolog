@@ -20,7 +20,8 @@ const formatBytes = (n: number) =>
       ? (n / 1024).toFixed(1) + " KiB"
       : n + " B";
 const cpuChart = new Sparkline(el("cpu-chart") as HTMLCanvasElement),
-  memChart = new Sparkline(el("mem-chart") as HTMLCanvasElement);
+  memChart = new Sparkline(el("mem-chart") as HTMLCanvasElement),
+  gpuChart = new Sparkline(el("gpu-chart") as HTMLCanvasElement);
 function notice(message: string) {
   show("error", message);
   el("error").hidden = false;
@@ -46,7 +47,10 @@ try {
   });
   function state(value: string) {
     show("state", value);
-    if (value !== "open") { show("gpu", "—"); show("gpu-status", "Disconnected"); }
+    if (value !== "open") {
+      show("gpu", "—");
+      show("gpu-status", "Disconnected");
+    }
     show("session", bridge.sessionId?.slice(0, 10) ?? "—");
     log(value + " · " + (bridge.sessionId?.slice(0, 10) ?? "awaiting session"));
     (el("kill") as HTMLButtonElement).disabled = value !== "open";
@@ -63,12 +67,22 @@ try {
     gpuPending = true;
     try {
       const sample = await bridge.call<GpuSample>("system.gpu");
-      show("gpu", sample.percent === null ? "n/a" : sample.percent.toFixed(0) + "%");
       show("gpu-status", sample.status);
+      if (sample.percent === null) {
+        show("gpu", "n/a");
+        show("gpu-detail", "No driver utilisation counter on this platform");
+      } else {
+        show("gpu", sample.percent.toFixed(0) + "%");
+        show("gpu-detail", "Driver-reported device utilisation · every 1 s");
+        gpuChart.add(Date.now(), sample.percent);
+      }
     } catch {
       show("gpu", "n/a");
       show("gpu-status", "Unavailable");
-    } finally { gpuPending = false; }
+      show("gpu-detail", "The host did not answer the GPU probe");
+    } finally {
+      gpuPending = false;
+    }
   }
   void updateGpu();
   setInterval(() => void updateGpu(), 1000);
