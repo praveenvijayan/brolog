@@ -12,6 +12,14 @@ curl -fsSL https://praveenvijayan.github.io/brolog/install.sh | sh
 
 The installer downloads to `~/.local/bin/brolog` and runs it. Alternatively, download your platform from [Releases](https://github.com/praveenvijayan/brolog/releases/latest). Windows uses `brolog-windows-x64.exe`. macOS may require allowing an unsigned download in Privacy & Security; Windows may show SmartScreen. The package is private and is not published for `bunx`.
 
+To confirm which build you have, run:
+
+```sh
+brolog --version
+```
+
+This prints `brolog vX.Y.Z` and exits without opening a browser. `-v` is an alias. The same version line appears at the top of the terminal output on every normal launch.
+
 ## Build and run
 
 Requires Bun 1.4.x. No runtime dependency beyond the two published bridge packages.
