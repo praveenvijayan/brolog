@@ -19,6 +19,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - run: cp scripts/install.sh site/install.sh
       - uses: actions/upload-pages-artifact@v3
         with:
