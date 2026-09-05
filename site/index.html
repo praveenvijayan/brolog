@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>brolog | Your system, streamed locally</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font:
+          16px/1.65 system-ui,
+          sans-serif;
+        color: #e8e6e2;
+        background: #1c1d1f;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      main {
+        max-width: 960px;
+        margin: auto;
+        padding: 48px 28px;
+      }
+      nav {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #393a3c;
+        padding-bottom: 24px;
+      }
+      a {
+        color: #eb6c36;
+      }
+      h1 {
+        font-size: clamp(40px, 7vw, 72px);
+        line-height: 1.05;
+        letter-spacing: -0.04em;
+        max-width: 700px;
+        margin: 64px 0 28px;
+      }
+      p {
+        max-width: 68ch;
+        color: #b2b1ad;
+      }
+      .eyebrow {
+        font:
+          12px ui-monospace,
+          monospace;
+        letter-spacing: 0.12em;
+        margin-top: 44px;
+      }
+      .tabs {
+        display: flex;
+        gap: 20px;
+        margin: 40px 0 20px;
+      }
+      button,
+      .download {
+        background: #27282a;
+        border: 1px solid #555659;
+        color: #e8e6e2;
+        padding: 12px 18px;
+        border-radius: 4px;
+        font: inherit;
+        cursor: pointer;
+      }
+      button[aria-selected="true"] {
+        border-color: #eb6c36;
+        color: #eb6c36;
+      }
+      :focus-visible {
+        outline: 2px solid #eb6c36;
+        outline-offset: 4px;
+      }
+      pre {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        background: #27282a;
+        padding: 24px;
+        font-size: 14px;
+      }
+      .downloads {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .download {
+        text-decoration: none;
+        font-size: 14px;
+      }
+      .note {
+        font-size: 13px;
+      }
+      .placeholder {
+        border: 1px dashed #555659;
+        padding: 64px 24px;
+        margin: 48px 0;
+        text-align: center;
+        color: #a7a6a3;
+      }
+      .placeholder strong {
+        display: block;
+        color: #e8e6e2;
+        font-size: 24px;
+      }
+      footer {
+        border-top: 1px solid #393a3c;
+        padding: 24px 0;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav>
+        <strong>brolog<span style="color: #eb6c36">.</span></strong
+        ><a href="https://github.com/praveenvijayan/brolog">Source ↗</a>
+      </nav>
+      <p class="eyebrow">A SMALL APP. A REAL TRANSPORT.</p>
+      <h1>Your system.<br />Streamed to your tab.</h1>
+      <p>
+        brolog is a single executable that opens a live system dashboard in your
+        browser. It showcases brobridge: one WebSocket, independent binary
+        streams, backpressure and reconnects. Loopback is not a security
+        boundary in a browser, because other pages can reach local listeners.
+        brobridge adds a one-time launch token, a strict session cookie and a
+        request fence so only your admitted tab can connect.
+      </p>
+      <div class="tabs" role="tablist" aria-label="Install method">
+        <button
+          id="curl-tab"
+          role="tab"
+          aria-selected="true"
+          aria-controls="curl-panel"
+        >
+          curl</button
+        ><button
+          id="direct-tab"
+          role="tab"
+          aria-selected="false"
+          aria-controls="direct-panel"
+          tabindex="-1"
+        >
+          Direct download
+        </button>
+      </div>
+      <section id="curl-panel" role="tabpanel" aria-labelledby="curl-tab">
+        <pre>
+curl -fsSL https://praveenvijayan.github.io/brolog/install.sh | sh</pre>
+        <p class="note">
+          macOS and Linux. Installs to ~/.local/bin and launches the app.
+          Downloads become available after the first release is published.
+        </p>
+      </section>
+      <section
+        id="direct-panel"
+        role="tabpanel"
+        aria-labelledby="direct-tab"
+        hidden
+      >
+        <div class="downloads">
+          <a
+            class="download"
+            href="https://github.com/praveenvijayan/brolog/releases/latest/download/brolog-darwin-arm64"
+            >macOS · Apple silicon</a
+          ><a
+            class="download"
+            href="https://github.com/praveenvijayan/brolog/releases/latest/download/brolog-darwin-x64"
+            >macOS · Intel</a
+          ><a
+            class="download"
+            href="https://github.com/praveenvijayan/brolog/releases/latest/download/brolog-linux-x64"
+            >Linux · x64</a
+          ><a
+            class="download"
+            href="https://github.com/praveenvijayan/brolog/releases/latest/download/brolog-linux-arm64"
+            >Linux · ARM64</a
+          ><a
+            class="download"
+            href="https://github.com/praveenvijayan/brolog/releases/latest/download/brolog-windows-x64.exe"
+            >Windows · x64</a
+          >
+        </div>
+        <p class="note">
+          The Bun runtime is embedded. Current builds are approximately 62–86
+          MiB, depending on platform. macOS may block unsigned downloads: allow
+          the app in Privacy &amp; Security or use the curl installer. Windows
+          SmartScreen may show a one-time warning. No Bun installation needed.
+        </p>
+      </section>
+      <div
+        class="placeholder"
+        role="img"
+        aria-label="Dashboard screenshot placeholder"
+      >
+        <strong>CPU / Memory / Load / Network</strong>Dashboard screenshot
+        placeholder<br />Live numbers come from your machine, never a hosted
+        service.
+      </div>
+      <footer>
+        Built to make transport visible.
+        <a href="https://github.com/praveenvijayan/brobridge"
+          >Read about brobridge ↗</a
+        >
+      </footer>
+    </main>
+    <script>
+      const tabs = [...document.querySelectorAll("[role=tab]")];
+      function select(tab) {
+        for (const item of tabs) {
+          const active = item === tab;
+          item.setAttribute("aria-selected", String(active));
+          item.tabIndex = active ? 0 : -1;
+          document.getElementById(item.getAttribute("aria-controls")).hidden =
+            !active;
+        }
+      }
+      tabs.forEach((tab, i) => {
+        tab.onclick = () => select(tab);
+        tab.onkeydown = (e) => {
+          if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) {
+            e.preventDefault();
+            const next =
+              tabs[e.key === "Home" ? 0 : e.key === "End" ? 1 : 1 - i];
+            select(next);
+            next.focus();
+          }
+        };
+      });
+    </script>
+  </body>
+</html>
