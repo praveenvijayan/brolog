@@ -72,7 +72,7 @@ No non-loopback bind, hosted UI, user identity, file listing, telemetry, externa
 
 ## Publishing
 
-Local builds do not publish anything. The release workflow runs checks and attaches all binaries to a GitHub Release on a `v*` tag. The Pages workflow deploys `site/` plus the installer on pushes to `main`; enable GitHub Pages with GitHub Actions as the source. The landing page intentionally keeps the requested screenshot placeholder.
+Local builds do not publish anything. The release workflow runs checks and attaches all binaries to a GitHub Release on a `v*` tag. The Pages workflow deploys `site/` plus the installer on pushes to `main`; enable GitHub Pages with GitHub Actions as the source. The landing page shows masked dashboard captures from macOS and Windows (`site/dashboard-*.png`).
 
 ## Verification on this machine
 

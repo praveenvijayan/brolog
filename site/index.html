@@ -93,17 +93,40 @@
       .note {
         font-size: 13px;
       }
-      .placeholder {
-        border: 1px dashed #555659;
-        padding: 64px 24px;
+      .shots {
+        display: grid;
+        gap: 32px;
         margin: 48px 0;
-        text-align: center;
-        color: #a7a6a3;
       }
-      .placeholder strong {
+      .shots figure {
+        margin: 0;
+      }
+      .shots img {
         display: block;
-        color: #e8e6e2;
-        font-size: 24px;
+        width: 100%;
+        height: auto;
+        border: 1px solid #393a3c;
+        border-radius: 4px;
+        background: #1c1d1f;
+      }
+      .shots .clip {
+        position: relative;
+        max-height: 960px;
+        overflow: hidden;
+        border-radius: 4px;
+      }
+      .shots .clip::after {
+        content: "";
+        position: absolute;
+        inset: auto 0 0 0;
+        height: 160px;
+        background: linear-gradient(transparent, #1c1d1f);
+        pointer-events: none;
+      }
+      .shots figcaption {
+        font-size: 13px;
+        color: #a7a6a3;
+        margin-top: 12px;
       }
       footer {
         border-top: 1px solid #393a3c;
@@ -190,14 +213,37 @@ curl -fsSL https://praveenvijayan.github.io/brolog/install.sh | sh</pre>
           SmartScreen may show a one-time warning. No Bun installation needed.
         </p>
       </section>
-      <div
-        class="placeholder"
-        role="img"
-        aria-label="Dashboard screenshot placeholder"
-      >
-        <strong>CPU / Memory / Load / Network</strong>Dashboard screenshot
-        placeholder<br />Live numbers come from your machine, never a hosted
-        service.
+      <div class="shots">
+        <figure>
+          <img
+            src="dashboard-macos.png"
+            width="1808"
+            height="2003"
+            alt="brolog dashboard on macOS: CPU, GPU, memory, system load, storage and network interface panels streamed over one WebSocket"
+            loading="lazy"
+          />
+          <figcaption>
+            macOS, Apple silicon. Every number is sampled on the machine
+            running brolog; nothing leaves loopback. Hostnames and address
+            prefixes are masked in these captures.
+          </figcaption>
+        </figure>
+        <figure>
+          <div class="clip">
+            <img
+              src="dashboard-windows.png"
+              width="1920"
+              height="2480"
+              alt="brolog dashboard on Windows with the CPU stream paused and the listening-ports panel showing per-socket kill buttons"
+              loading="lazy"
+            />
+          </div>
+          <figcaption>
+            Windows, x64. The CPU stream is paused while memory keeps ticking,
+            and the listening-ports panel lists every socket with a guarded
+            kill button. Cropped; the full list runs much longer.
+          </figcaption>
+        </figure>
       </div>
       <footer>
         Built to make transport visible.
