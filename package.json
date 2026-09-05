@@ -1,0 +1,22 @@
+{
+  "name": "brolog",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:page": "bun scripts/build-page.ts",
+    "build:bin": "bun scripts/build-bin.ts",
+    "dev": "bun run build:page && bun src/host/main.ts",
+    "check": "bun run build:page && tsc --noEmit && bun test"
+  },
+  "dependencies": {
+    "brobridge": "0.2.0",
+    "@brobridgejs/client": "0.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "@brobridgejs/core": "0.2.0"
+  }
+}

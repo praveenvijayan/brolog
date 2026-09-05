@@ -1,0 +1,30 @@
+{
+  "lockfileVersion": 2,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "brolog",
+      "dependencies": {
+        "@brobridgejs/client": "0.2.0",
+        "brobridge": "0.2.0",
+      },
+      "devDependencies": {
+        "typescript": "^5.9.3",
+      },
+    },
+  },
+  "overrides": {
+    "@brobridgejs/core": "0.2.0",
+  },
+  "packages": {
+    "@brobridgejs/client": ["@brobridgejs/client@0.2.0", "", { "dependencies": { "@brobridgejs/core": "^0.2.0" } }, "sha512-EKID0Iy3KVy2/jr7StgNzU6k2EdwsDGru4B+Gm+cGpSfgJn4ceo4l/lQFubW9/IWcDNzHiE6ozZCNBJfFWD64Q=="],
+
+    "@brobridgejs/core": ["@brobridgejs/core@0.2.0", "", {}, "sha512-pHa/mSTEXybr0dNpA51LB7RPfgNgVzOE3Qp/5+wIbF7P6bs3OMF3bUVrIc2CisKSwpL5WZ9Xa50NaJItDL5ZLA=="],
+
+    "brobridge": ["brobridge@0.2.0", "", { "dependencies": { "@brobridgejs/core": "workspace:^", "ws": "^8.21.3" } }, "sha512-7pLoh5+IvvMopMNjDVbc8w8PNRPjZiwOlAmzSaCpfPFLcu3ha9S8tD81XFFpPg+/UGmLBwfQWxUftJhKA7WVYw=="],
+
+    "typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
+
+    "ws": ["ws@8.21.3", "", { "peerDependencies": { "bufferutil": "^4.0.1", "utf-8-validate": ">=5.0.2" }, "optionalPeers": ["bufferutil", "utf-8-validate"] }, "sha512-201TZ/kPWxoPr/OKWjquZR1SWKXcvxdH+e1xrx89b3YbmzLMFCLfnaG1HFIgWzJOEWZ7MvpK++odZufgYR50Rw=="],
+  }
+}
