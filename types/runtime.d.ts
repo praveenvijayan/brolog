@@ -2,10 +2,12 @@
 // budget at the two bridge packages and TypeScript; no ambient `any` shims.
 declare const process: {
   platform: string;
+  pid: number;
   argv: string[];
   env: Record<string, string | undefined>;
   on(event: string, listener: () => void): void;
   exit(code: number): never;
+  kill(pid: number, signal: string): boolean;
 };
 declare const Bun: {
   build(options: {
@@ -22,7 +24,7 @@ declare const Bun: {
   spawn(
     argv: string[],
     options: { stdout: "inherit" | "ignore"; stderr: "inherit" | "ignore" },
-  ): { exited: Promise<number> };
+  ): { exited: Promise<number>; pid: number; kill(): void };
 };
 declare module "*.html" {
   const text: string;
@@ -80,5 +82,10 @@ declare module "bun:test" {
 }
 
 declare module "node:child_process" {
-  export function execFile(file: string, args: string[], options: {timeout: number; maxBuffer: number}, callback: (error: Error | null, stdout: string, stderr: string) => void): void;
+  export function execFile(
+    file: string,
+    args: string[],
+    options: { timeout: number; maxBuffer: number },
+    callback: (error: Error | null, stdout: string, stderr: string) => void,
+  ): void;
 }

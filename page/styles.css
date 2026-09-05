@@ -225,6 +225,7 @@ tbody tr:last-child td {
   border: 0;
 }
 .table-wrap {
+  position: relative;
   overflow-x: auto;
 }
 button,
@@ -298,8 +299,29 @@ footer {
   padding: 16px;
   margin-bottom: 16px;
 }
-#storage-note {
+#storage-note,
+#ports-note {
   margin-top: 12px;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+td.action {
+  text-align: right;
+  white-space: nowrap;
+}
+td.action button {
+  font-size: 11px;
+  padding: 4px 10px;
+  min-width: 82px;
+}
+td.action .self {
+  color: var(--muted);
 }
 #memory-detail,
 #gpu-detail {

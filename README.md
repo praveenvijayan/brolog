@@ -63,11 +63,12 @@ Pause holds the CPU iterator without cancelling it. The default 64 KiB credit bu
 6. In another terminal, use the port from the launch URL (omit its token):
    `curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:<port>/`
    Expected: `403`.
-7. Close the dashboard tab. The process should exit successfully in roughly 30–34 seconds. Ctrl+C also closes it. Without any connection it exits after three minutes with status 1.
+7. In panel 07, find a process you own, click **Kill**, then **Confirm**. The events list should report `Sent SIGTERM to <name> (<pid>)` and the row should disappear on the next refresh. brolog's own port shows `this app` and cannot be killed.
+8. Close the dashboard tab. The process should exit successfully in roughly 30–34 seconds. Ctrl+C also closes it. Without any connection it exits after three minutes with status 1.
 
 ## What this deliberately does not do
 
-No non-loopback bind, hosted UI, user identity, disk or process inspection, telemetry, external assets, filesystem serving or security overrides. System info excludes userInfo and homedir. Launch credentials appear only in the terminal fallback message and browser launch; never in saved files or logs.
+No non-loopback bind, hosted UI, user identity, file listing, telemetry, external assets, filesystem serving or security overrides. Process inspection is limited to the owners of listening sockets, and the only process control is the kill button described under Ports reading. System info excludes userInfo and homedir. Launch credentials appear only in the terminal fallback message and browser launch; never in saved files or logs.
 
 ## Publishing
 
@@ -84,3 +85,9 @@ Panel 05 shows used and available space on the volume that holds the operating s
 ## GPU reading
 
 GPU usage has its own panel (02) with Active/Idle status and a 60-second sparkline. On macOS, a bounded, cached `ioreg` probe reads the driver's Device Utilization counter once per second, independently of CPU pause and sample interval. Multiple devices report the busiest percentage. This adds no dependency or admin requirement; no process data is collected. Missing counters and other operating systems show Unavailable, never a fabricated zero. GPU RPC traffic is excluded from the sample-payload byte comparison.
+
+## Ports reading
+
+Panel 07 lists TCP listeners and bound UDP sockets with their port, address, process name, PID and owner. It reads `lsof` on macOS, `ss` on Linux and `netstat` plus `tasklist` on Windows through a cached, coalesced unary call every 5 s, with the same bounded-subprocess pattern as the GPU probe. IPv4 and IPv6 sockets bound by one process to the same port are shown as one row. Sockets whose owner cannot be read (another user's process on Linux without privileges) are listed without a PID and have no kill button.
+
+Each row has a **Kill** button that must be clicked twice within five seconds. The first confirmed click sends SIGTERM. If the process is still listed on a later refresh, the button reads **Force kill** and sends SIGKILL. The host only signals a PID that appeared in its own last listing, never brolog itself, and reports EPERM (another user's process) or ESRCH (already gone) as messages in the events list rather than failing silently. Every signal the host sends is printed to the terminal.

@@ -7,6 +7,7 @@ import {
   type NetSample,
 } from "./schema";
 import type { GpuSample } from "../src/host/gpu";
+import type { KillResult, KillSignal, PortEntry, PortSample } from "../src/host/ports";
 import type { StorageSample } from "../src/host/storage";
 import type { SystemInfo } from "../src/host/vitals";
 import { Sparkline } from "./charts";
@@ -38,7 +39,13 @@ let socket: WebSocket | null = null,
   wake: (() => void) | undefined,
   received = 0,
   equivalent = 0,
-  generation = 0;
+  generation = 0,
+  ports: PortSample = { entries: [], source: null },
+  portsKey = "",
+  confirming: number | null = null,
+  confirmTimer: ReturnType<typeof setTimeout> | undefined;
+// Processes sent SIGTERM that are still listed get a force-kill button.
+const terminated = new Set<number>();
 type Client = Awaited<ReturnType<typeof connect>>;
 type Stream = Awaited<ReturnType<Client["openStream"]>>;
 const streams = new Set<Stream>();
@@ -55,6 +62,7 @@ try {
     show("session", bridge.sessionId?.slice(0, 10) ?? "—");
     log(value + " · " + (bridge.sessionId?.slice(0, 10) ?? "awaiting session"));
     (el("kill") as HTMLButtonElement).disabled = value !== "open";
+    renderPorts();
     if (value === "closed")
       notice(
         "The host connection is closed. The app may have exited; relaunch brolog to reconnect.",
@@ -121,6 +129,124 @@ try {
   }
   void updateStorage();
   setInterval(() => void updateStorage(), 5000);
+  function cell(text: string, className?: string) {
+    const td = document.createElement("td");
+    td.textContent = text;
+    if (className) td.className = className;
+    return td;
+  }
+  function renderPorts() {
+    const rows = ports.entries;
+    if (!rows.length) {
+      const td = cell(
+        ports.source
+          ? "No listening sockets"
+          : "Port listing is unavailable on this platform",
+      );
+      td.colSpan = 7;
+      const tr = document.createElement("tr");
+      tr.append(td);
+      el("ports").replaceChildren(tr);
+      return;
+    }
+    el("ports").replaceChildren(
+      ...rows.map((row) => {
+        const tr = document.createElement("tr");
+        tr.append(
+          cell(String(row.port)),
+          cell(row.protocol.toUpperCase()),
+          cell(row.address),
+          cell(row.command || "—"),
+          cell(row.pid ? String(row.pid) : "—"),
+          cell(row.user || "—"),
+        );
+        const action = cell("", "action");
+        if (row.self) {
+          const span = document.createElement("span");
+          span.className = "self";
+          span.textContent = "this app";
+          action.append(span);
+        } else if (row.pid) {
+          const button = document.createElement("button");
+          const armed = confirming === row.pid;
+          button.textContent = armed
+            ? "Confirm"
+            : terminated.has(row.pid)
+              ? "Force kill"
+              : "Kill";
+          button.setAttribute("aria-pressed", String(armed));
+          button.setAttribute(
+            "aria-label",
+            `${button.textContent} ${row.command || "process"} ${row.pid} on port ${row.port}`,
+          );
+          button.disabled = bridge.state !== "open";
+          button.onclick = () => void killPort(row);
+          action.append(button);
+        }
+        tr.append(action);
+        return tr;
+      }),
+    );
+  }
+  async function killPort(row: PortEntry) {
+    clearTimeout(confirmTimer);
+    if (confirming !== row.pid) {
+      confirming = row.pid;
+      confirmTimer = setTimeout(() => {
+        confirming = null;
+        renderPorts();
+      }, 5000);
+      renderPorts();
+      return;
+    }
+    confirming = null;
+    const signal: KillSignal = terminated.has(row.pid) ? "KILL" : "TERM";
+    renderPorts();
+    try {
+      const result = await bridge.call<KillResult>(
+        "system.killPort",
+        row.pid,
+        signal,
+      );
+      log(result.message);
+      if (result.ok) {
+        if (signal === "TERM") terminated.add(row.pid);
+        renderPorts();
+        setTimeout(() => void updatePorts(), 1500);
+      }
+    } catch {
+      log("The host did not answer the kill request");
+    }
+  }
+  let portsPending = false;
+  async function updatePorts() {
+    if (portsPending || bridge.state !== "open") return;
+    portsPending = true;
+    try {
+      ports = await bridge.call<PortSample>("system.ports");
+      for (const pid of terminated)
+        if (!ports.entries.some((e) => e.pid === pid)) terminated.delete(pid);
+      show(
+        "ports-source",
+        ports.source
+          ? `${ports.entries.length} sockets via ${ports.source} · every 5 s`
+          : "Every 5 s",
+      );
+      // Rebuild rows only when the listing changed, so a button does not
+      // vanish under the pointer or lose focus on every refresh.
+      const key = JSON.stringify([ports, [...terminated]]);
+      if (key !== portsKey) {
+        portsKey = key;
+        renderPorts();
+      }
+    } catch {
+      show("ports-source", "The host did not answer the port probe");
+    } finally {
+      portsPending = false;
+    }
+  }
+  void updatePorts();
+  setInterval(() => void updatePorts(), 5000);
   const info = await bridge.call<SystemInfo>("system.info");
   show("hostname", info.hostname);
   show("machine", info.platform + " / " + info.arch);

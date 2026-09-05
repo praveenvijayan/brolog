@@ -145,6 +145,37 @@
         </div>
       </section>
       <section>
+        <div class="section-head">
+          <h2>07 <span>Listening ports</span></h2>
+          <span class="caption" id="ports-source">Every 5 s</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Port</th>
+                <th>Proto</th>
+                <th>Address</th>
+                <th>Process</th>
+                <th>PID</th>
+                <th>User</th>
+                <th><span class="visually-hidden">Action</span></th>
+              </tr>
+            </thead>
+            <tbody id="ports">
+              <tr>
+                <td colspan="7">Waiting for sockets</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="caption" id="ports-note">
+          TCP listeners and bound UDP sockets. Kill asks once, then sends
+          SIGTERM; a process that stays listed can be force-killed with
+          SIGKILL. Results appear in the connection events below.
+        </p>
+      </section>
+      <section>
         <h2>Try the transport</h2>
         <div class="controls">
           <button id="kill" disabled>Kill the socket</button
