@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>brolog | Local system vitals</title>
+    <!--CSS-->
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <span class="eyebrow">LOCAL SYSTEM / LIVE TRANSPORT</span>
+          <h1>brolog<span class="accent">.</span></h1>
+        </div>
+        <div class="machine">
+          <strong id="hostname">Connecting to your machine</strong>
+          <div id="machine">Waiting for system info</div>
+          <div>Uptime <span id="uptime">—</span></div>
+        </div>
+      </header>
+      <div id="error" role="alert" hidden></div>
+      <section class="connection" aria-label="Connection">
+        <span id="state" class="badge">connecting</span
+        ><span>Session <b id="session">—</b></span
+        ><span>RTT <b id="ping">—</b></span
+        ><span>Received <b id="bytes">0 B</b></span
+        ><span>JSON equivalent <b id="json">0 B</b></span>
+      </section>
+      <p class="caption">
+        Binary sample payload only; protocol framing and replay traffic are
+        excluded.
+      </p>
+      <section class="cpu">
+        <div class="section-head">
+          <h2>01 <span>CPU utilisation</span></h2>
+          <button id="pause" disabled aria-pressed="false">
+            Pause this stream
+          </button>
+        </div>
+        <div class="reading">
+          <strong id="cpu">—</strong
+          ><span id="cpu-model">Waiting for samples</span>
+        </div>
+        <canvas
+          id="cpu-chart"
+          role="img"
+          aria-label="CPU utilisation over the last 60 seconds, from 0 to 100 percent"
+        ></canvas>
+        <div class="axis">
+          <span>60 seconds ago</span><span>0–100% · now</span>
+        </div>
+        <div id="cores" class="cores"></div>
+        <p id="pause-note" class="caption">
+          Each core shares one stream. Memory and load have their own credit.
+        </p>
+      </section>
+      <div class="secondary">
+        <section>
+          <h2>02 <span>Memory</span></h2>
+          <div class="reading"><strong id="memory">—</strong></div>
+          <p id="memory-detail">Waiting for samples</p>
+          <meter
+            id="memory-gauge"
+            min="0"
+            max="100"
+            value="0"
+            aria-label="Memory utilisation"
+          ></meter
+          ><canvas
+            id="mem-chart"
+            role="img"
+            aria-label="Memory utilisation over the last 60 seconds, from 0 to 100 percent"
+          ></canvas>
+          <div class="axis">
+            <span>60 seconds ago</span><span>0–100% · now</span>
+          </div>
+        </section>
+        <section>
+          <h2>03 <span>System load</span></h2>
+          <div class="loads">
+            <div><strong id="load1">—</strong><span>1 minute</span></div>
+            <div><strong id="load5">—</strong><span>5 minutes</span></div>
+            <div><strong id="load15">—</strong><span>15 minutes</span></div>
+          </div>
+          <p class="caption" id="load-note">
+            Runnable and waiting tasks. Compare with your logical core count.
+          </p>
+        </section>
+      </div>
+      <section>
+        <div class="section-head">
+          <h2>04 <span>Network interfaces</span></h2>
+          <span class="caption">Addresses masked · every 5 samples</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Interface</th>
+                <th>Family</th>
+                <th>Masked address</th>
+                <th>Scope</th>
+              </tr>
+            </thead>
+            <tbody id="network">
+              <tr>
+                <td colspan="4">Waiting for interfaces</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section>
+        <h2>Try the transport</h2>
+        <div class="controls">
+          <button id="kill" disabled>Kill the socket</button
+          ><label
+            >Sample interval
+            <select id="interval" disabled>
+              <option value="250">250 ms</option>
+              <option value="1000" selected>1 s</option>
+              <option value="2000">2 s</option>
+            </select></label
+          ><span id="echo" class="caption">Checking connectivity</span>
+        </div>
+        <p class="caption">
+          Cut the connection. Watch it resume with the same session and buffered
+          samples.
+        </p>
+        <ol id="events" aria-label="Connection events"></ol>
+      </section>
+      <details>
+        <summary>How this works</summary>
+        <p>
+          A one-time launch token admits this tab, then disappears from the URL.
+          An HttpOnly, SameSite=Strict cookie authenticates subsequent requests.
+          An exact Host match blocks alternate hostnames and DNS rebinding.
+          Sec-Fetch-Site and Origin checks fence out other web pages. This
+          entire page, including its client, is served from inside the binary.
+        </p>
+        <a
+          href="https://github.com/praveenvijayan/brobridge"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Explore brobridge ↗</a
+        >
+      </details>
+      <footer>One process. One socket. Independent streams.</footer>
+    </main>
+    <!--APP-->
+  </body>
+</html>

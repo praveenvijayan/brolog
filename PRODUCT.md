@@ -1,0 +1,2 @@
+# brolog
+Register: product. Developers run a local executable to inspect system vitals and experiment with brobridge transport. BUILD-PROMPT.md is the product brief: honest backpressure, visible reconnection, no external page resources and no security overrides. The dashboard is a quiet instrument on a developer's desktop, with a deliberately dark surface, compact system typography and readable numerical data. Avoid decorative animation, gradients, framework chrome and invented telemetry.

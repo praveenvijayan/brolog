@@ -1,0 +1,2 @@
+# Design
+Dark charcoal surface, warm neutral text, one tangerine accent (#eb6c36 from the diagram standard). System sans-serif labels and monospace numerals. Thin separators, flat sections, strong keyboard focus. CPU is the wide primary panel; secondary metrics share a row. Responsive at 400px. Canvas line charts are explicitly required by the build prompt: zero-based percentages, 60-second time axes, no smoothing or decorative motion. Numeric summaries provide accessible alternatives.
