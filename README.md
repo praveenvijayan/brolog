@@ -10,7 +10,7 @@ After a release is published, macOS and Linux users can run:
 curl -fsSL https://praveenvijayan.github.io/brolog/install.sh | sh
 ```
 
-The installer downloads to `~/.local/bin/brolog` and runs it. Alternatively, download your platform from [Releases](https://github.com/praveenvijayan/brolog/releases/latest). Windows uses `brolog-windows-x64.exe`. macOS may require allowing an unsigned download in Privacy & Security; Windows may show SmartScreen. The package is private and is not published for `bunx`.
+The installer downloads to `~/.local/bin/brolog` and runs it. Alternatively, download your platform from [Releases](https://github.com/praveenvijayan/brolog/releases/latest). macOS and Linux downloads are `.tar.gz` archives that unpack to an executable `brolog`; a bare binary saved by a browser loses its executable bit and needs `chmod +x` before it will run. Windows uses `brolog-windows-x64.exe`. macOS may require allowing an unsigned download in Privacy & Security; Windows may show SmartScreen. The package is private and is not published for `bunx`.
 
 To confirm which build you have, run:
 
