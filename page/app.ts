@@ -6,6 +6,7 @@ import {
   jsonBytes,
   type NetSample,
 } from "./schema";
+import type { GpuSample } from "../src/host/gpu";
 import type { SystemInfo } from "../src/host/vitals";
 import { Sparkline } from "./charts";
 const el = (id: string) => document.getElementById(id)!;
@@ -45,6 +46,7 @@ try {
   });
   function state(value: string) {
     show("state", value);
+    if (value !== "open") { show("gpu", "—"); show("gpu-status", "Disconnected"); }
     show("session", bridge.sessionId?.slice(0, 10) ?? "—");
     log(value + " · " + (bridge.sessionId?.slice(0, 10) ?? "awaiting session"));
     (el("kill") as HTMLButtonElement).disabled = value !== "open";
@@ -55,6 +57,21 @@ try {
   }
   state(bridge.state);
   bridge.on("state", state);
+  let gpuPending = false;
+  async function updateGpu() {
+    if (gpuPending || bridge.state !== "open") return;
+    gpuPending = true;
+    try {
+      const sample = await bridge.call<GpuSample>("system.gpu");
+      show("gpu", sample.percent === null ? "n/a" : sample.percent.toFixed(0) + "%");
+      show("gpu-status", sample.status);
+    } catch {
+      show("gpu", "n/a");
+      show("gpu-status", "Unavailable");
+    } finally { gpuPending = false; }
+  }
+  void updateGpu();
+  setInterval(() => void updateGpu(), 1000);
   const info = await bridge.call<SystemInfo>("system.info");
   show("hostname", info.hostname);
   show("machine", info.platform + " / " + info.arch);

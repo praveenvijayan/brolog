@@ -346,3 +346,9 @@ footer {
     gap: 36px;
   }
 }
+
+.reading { flex-wrap: wrap; }
+.reading .gpu-reading { font-size: 14px; white-space: nowrap; }
+.gpu-reading b { font-size: 24px; margin: 0 6px; }
+#gpu-status { font-size: 11px; }
+#cpu-model { flex-basis: 100%; }

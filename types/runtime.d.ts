@@ -74,3 +74,7 @@ declare module "bun:test" {
     toThrow(): void;
   };
 }
+
+declare module "node:child_process" {
+  export function execFile(file: string, args: string[], options: {timeout: number; maxBuffer: number}, callback: (error: Error | null, stdout: string, stderr: string) => void): void;
+}

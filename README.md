@@ -68,3 +68,7 @@ Local builds do not publish anything. The release workflow runs checks and attac
 ## Verification on this machine
 
 Bun 1.4.0 on macOS ARM64: all 10 tests and TypeScript checks pass. All five binaries compile. The compiled ARM64 binary served live samples, passed an unauthenticated curl 403 check, and resumed the same session after killing the socket. Browser inspection covered 900 px and 400 px (no document overflow). CPU stayed at 14.0% while received bytes increased during pause, including an interval change. After closing the controlled browser tab, the listener stopped in 29.1 seconds from the measurement start (roughly 30 seconds from tab close), and the process exited with status 0. Cross-compiled Linux, Windows and Intel macOS binaries have not been run on their native operating systems.
+
+## GPU reading
+
+GPU usage and Active/Idle status appear beside CPU. On macOS, a bounded, cached `ioreg` probe reads the driver's Device Utilization counter once per second, independently of CPU pause and sample interval. Multiple devices report the busiest percentage. This adds no dependency or admin requirement; no process data is collected. Missing counters and other operating systems show Unavailable, never a fabricated zero. GPU RPC traffic is excluded from the sample-payload byte comparison.
